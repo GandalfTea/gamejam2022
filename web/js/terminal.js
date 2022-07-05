@@ -13,16 +13,20 @@
 		ELSE:
 			WIN
 
-Store printed information in local memory cache
-Once cache has, issue a reprint
+	Store printed information in local memory cache
+	Once cache has, issue a reprint
 
 ************************************/
+
+import logo from "logo.js";
 
 
 /* GLOBAL VARS *********************/
 
 var PRINT_CACHE = [];
 
+// Initial welcome text
+PRINT_CACHE.push(logo);
 
 
 /* ERROR HANDLING ******************/
@@ -42,9 +46,9 @@ enum CommandSuccess {
 
 /* DOM HANDLING ********************/
 
-function reprint() {}
-
-
+function reprint() {
+	document.getElementById("terminal").innerText = serialize( PRINT_CACHE );
+}
 
 
 /* HELPERS *************************/
@@ -53,6 +57,15 @@ function print( var msg ) {
 	PRINT_CACHE.push(msg);	
 	reprint()
 } 
+
+// Serialize the local cache into terminal-friendly format
+function serialize( var cache ) {
+	var ret = "";
+	for( const str in cache ) {
+		ret += str + "\n";
+	}
+	return ret;
+}
 
 
 
