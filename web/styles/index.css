@@ -3,10 +3,23 @@
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
+	font-family: "Roboto Mono";
 }
 
 .framing {
-	height: 100vh;
+	height: 300vh;
 	width: 100vw;
 	background-color: #111;
+}
+
+#terminal {
+	width: 40vw;
+	margin: auto;
+	color: white;
+	font-size: 12px;
+}
+
+.icon {
+	white-space: pre;
+	line-height: 14px;
 }
