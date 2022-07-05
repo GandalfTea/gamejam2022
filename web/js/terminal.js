@@ -76,5 +76,6 @@ let input_command = "";
 
 do {
 	print("[agent name]$ ");	
+	// accept input >> input_command
 
 } while ( input_command != ".quit" || input_command != ".q" || input_command != ".exit")
