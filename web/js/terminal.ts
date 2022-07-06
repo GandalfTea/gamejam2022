@@ -23,7 +23,9 @@ import new_logo from "./logo.js";
 
 /* GLOBAL VARS *********************/
 
-var PRINT_CACHE = [];
+var PRINT_CACHE: Array<string> = [];
+var USER: string = "";
+
 
 // Initial welcome text
 for(var i = 0; i < 15; i++) {
@@ -103,14 +105,62 @@ function reprint() {
 
 /* HELPERS *************************/
 
-function print( msg: string ) {
+function print( msg: string, cleanHTML:boolean=false):void {
 	PRINT_CACHE.push(msg);	
+
+	// Remove HTML elements from history
+	if(cleanHTML) {
+		for( const i in PRINT_CACHE) {
+			if(PRINT_CACHE[i].includes("</input>")) {
+				PRINT_CACHE.splice(i, 1);
+			}
+		}
+	}
 	reprint()
 } 
 
 function input() {
-	// Wait for input
+	print("[USER]$ ");
+	print("<input id='terminal-input' type='text'></input>");
+	const input = document.getElementById("terminal-input");
+	input.focus();
+	input.addEventListener("keypress", (e) => { 			// The event listener is removed with the element
+		if(e.key === "Enter") {
+			// Remove input and replace with text
+			e.preventDefault();
+			const cmd = input.value;
+			input.remove();
+			print(cmd, true);
+
+			// Parse input and execute
+		}
+	});
+
 	input_command = ".quit";
+}
+
+function ainput() {
+
+	print("<br>[USER]$ ");
+	print("<input id='terminal-input' type='text'></input>");
+	const input = document.getElementById("terminal-input");
+	input.focus();
+
+	return new Promise( resolve => {
+		input.addEventListener("keypress", (e) => { 			// The event listener is removed with the element
+			if(e.key === "Enter") {
+				// Remove input and replace with text
+				e.preventDefault();
+				const cmd = input.value;
+				input.remove();
+				print(cmd, true);
+				resolve();
+
+				// Parse input and execute
+			}
+		});
+		//input_command = ".quit";
+	})
 }
 
 // Serialize the local cache into terminal-friendly format
@@ -129,10 +179,13 @@ function serialize( cache: Array<string> ) {
 
 let input_command = "";
 
-//do {
-	//print("[agent name]$ ");	
-	reprint()
-	//accept input >> input_command
-	input();
+async function loop() {
+	do {
+		//print("[agent name]$ ");	
+		reprint()
+		await ainput();
 
-//} while ( input_command != ".quit")
+	} while ( input_command != ".quit")
+}
+
+loop();
